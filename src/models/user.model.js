@@ -47,6 +47,8 @@ const userSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+//! encrypt the password :
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
 
@@ -54,6 +56,7 @@ userSchema.pre("save", async function (next) {
     next()
 })
 
+//! Create custom model :
 userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password)
 }
@@ -72,6 +75,7 @@ userSchema.methods.generateAccessToken = function () {
         }
     )
 }
+
 userSchema.methods.generateRefreshToken = function () {
     return jwt.sign(
         {
